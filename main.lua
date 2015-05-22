@@ -7,6 +7,7 @@ local Dominos = LibStub('AceAddon-3.0'):GetAddon('Dominos')
 local ActionSets = Dominos:NewModule('ActionSets', 'AceEvent-3.0', 'AceConsole-3.0'); Dominos.ActionSets = ActionSets
 
 --constants
+local ConfigVersion = 1
 local MAX_BUTTONS = 120
 local PLAYER_CLASS = (select(2, UnitClass('player')))
 
@@ -88,6 +89,10 @@ function ActionSets:InitDatabase()
 	db.RegisterCallback(self, 'OnProfileCopied')
 	db.RegisterCallback(self, 'OnProfileReset')
 
+	if db.global.version ~= ConfigVersion then
+		self:UpgradeDatabase(db)
+	end
+
 	self.db = db
 end
 
@@ -99,6 +104,10 @@ function ActionSets:GetDatabaseDefaults()
 			}
 		}
 	}
+end
+
+function ActionSets:UpgradeDatabase(db)
+	db.global.version = ConfigVersion
 end
 
 function ActionSets:IsActionSetProfileEmpty()
