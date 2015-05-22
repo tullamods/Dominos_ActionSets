@@ -3,4 +3,6 @@
 ## Notes: Action bar profiles for Dominos
 ## Author: Tuller
 ## Dependencies: Dominos
+mountHelper.lua
+setActionHelper.lua
 main.lua
