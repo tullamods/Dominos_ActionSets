@@ -11,6 +11,7 @@ local PickupSpell = _G.PickupSpell
 local PickupCompanion = _G.PickupCompanion
 local PickupEquipmentSet = _G.PickupEquipmentSet
 local PickupPet =  _G.C_PetJournal.PickupPet
+local PickupFlyout = Addon.PickupFlyout
 local PickupMount = Addon.PickupMount
 
 local setActionHandlers = {
@@ -29,15 +30,23 @@ local setActionHandlers = {
 			return true
 		end
 	end,
+	
+	flyout = function(slot, flyoutId)
+		local currentType, currentFlyoutId = GetActionInfo(slot)
 
-	macro = function(slot, macroId)
-		local currentType, currentMacroId = GetActionInfo(slot)
+		if not(currentType  == 'flyout' and currentFlyoutId == flyoutId) then
+			return PickupFlyout(flyoutId)
+		end
+	end,
+	
+	macro = function(slot, flyoutId)
+		local currentType, currentFlyoutId = GetActionInfo(slot)
 
-		if not(currentType  == 'macro' and currentMacroId == macroId) then
+		if not(currentType  == 'macro' and currentFlyoutId == flyoutId) then
 			PickupMacro(macroId)
 			return true
 		end
-	end,
+	end,	
 
 	petaction = function(slot, petActionId)
 		local currentType, currentPetActionId = GetActionInfo(slot)
@@ -79,9 +88,7 @@ local setActionHandlers = {
 		local currentType, currentMountId = GetActionInfo(slot)
 
 		if not(currentType == 'summonmount' and currentMountId == mountId) then
-			if PickupMount(mountId) then
-				return true
-			end
+			return PickupMount(mountId)
 		end
 	end,
 
@@ -96,10 +103,10 @@ local setActionHandlers = {
 }
 
 Addon.SetAction = function(slot, type, id, subtype)
-    local handler = setActionHandlers[type or 'clear']
+	local handler = setActionHandlers[type or 'clear']
 
 	if handler then
-        local id = tonumber(id) or id
+		local id = tonumber(id) or id
 
 		if handler(slot, id, subtype) then
 			PlaceAction(slot)
