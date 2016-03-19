@@ -97,13 +97,19 @@ function ActionSets:InitDatabase()
 end
 
 function ActionSets:GetDatabaseDefaults()
+    local profileKey = self:GetProfileKey()
+
 	return {
 		profile = {
-			[PLAYER_CLASS] = {
+			[profileKey] = {
 				actionSets = {},
 			}
 		}
 	}
+end
+
+function ActionSets:GetProfileKey()
+    return ('%s - %s'):format(UnitName('player'), GetRealmName())
 end
 
 function ActionSets:UpgradeDatabase(db)
@@ -115,7 +121,7 @@ function ActionSets:IsActionSetProfileEmpty()
 end
 
 function ActionSets:GetActionSetProfile()
-	return self.db.profile[PLAYER_CLASS].actionSets
+	return self.db.profile[self:GetProfileKey()].actionSets
 end
 
 
