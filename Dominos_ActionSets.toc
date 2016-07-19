@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: Dominos ActionSets
 ## Notes: Action bar profiles for Dominos
 ## Author: Tuller
